@@ -25,6 +25,7 @@ class TemplateFieldLayout {
     
     init(path: String, fileExtension: String, dataFromExternalPath: Bool) {
         self.jsonObjectManager = SimpleJSON(path: path, fileExtension: fileExtension, dataFromExternalPath: dataFromExternalPath)
+        
     }
     
     
@@ -38,7 +39,8 @@ class TemplateFieldLayout {
      
      
      */
-    func createLayout(viewToLayout view: UIView, jsonMessage json: JSON?) throws -> UIView? {
+    func createLayout(viewToLayout view: UIView, jsonMessage json: JSON?, completionHandler completion: @escaping (UIView) -> Void ) throws -> UIView? {
+        
         guard let json = json ?? jsonObjectManager?.json else {
             throw SimpleJSONerror.noJSON
         }
@@ -64,6 +66,7 @@ class TemplateFieldLayout {
                     view.addSubview(button)
                 }
             } else {
+                completion(view)
                 return view
             }
 
@@ -80,6 +83,7 @@ class TemplateFieldLayout {
         
         // with json object found we need to parse through it and find all the objects we need to create
         view.layoutSubviews()
+        dump(view.subviews)
         return view
         
     }
@@ -94,9 +98,46 @@ class TemplateFieldLayout {
                 return nil
             }
             for item in dict {
+                let someLabel = UILabel()
                 if item["field_type"] as? String == "label" {
-                    let someLabel = UILabel()
                     someLabel.text = item["field_name"] as? String
+                    guard let posy = item["posy"] as? String else {
+                        print("breaking from posy")
+                        arrayOfLabels.append(someLabel)
+                        break
+                    }
+                    guard let posx = item["posx"] as? String else {
+                        print("breaking from posx")
+                        arrayOfLabels.append(someLabel)
+                        break
+                    }
+                    guard let width = item["width"] as? String else {
+                        print("breaking from width")
+                        arrayOfLabels.append(someLabel)
+                        break
+                    }
+                    guard let height = item["height"] as? String else {
+                        print("breaking from height")
+                        arrayOfLabels.append(someLabel)
+                        break
+                    }
+                    guard let posxInt = Int(posx) else {
+                        print("couldn't make posx an int")
+                        break
+                    }
+                    guard let posyInt = Int(posy) else {
+                        print("couldn't make posy an int")
+                        break
+                    }
+                    guard let widthInt = Int(width) else {
+                        print("couldn't make width an int")
+                        break
+                    }
+                    guard let heightInt = Int(height) else {
+                        print("couldn't make height an int")
+                        break
+                    }
+                    someLabel.frame = CGRect(x: posxInt, y: posyInt, width: widthInt, height: heightInt)
                     arrayOfLabels.append(someLabel)
                 }
             }
@@ -123,6 +164,43 @@ class TemplateFieldLayout {
                 if item["field_type"] as? String == "button" {
                     let someButton = UIButton()
                     someButton.titleLabel?.text = item["field_name"] as? String
+                    guard let posy = item["posy"] as? String else {
+                        print("breaking from posy")
+                        arrayOfButtons.append(someButton)
+                        break
+                    }
+                    guard let posx = item["posx"] as? String else {
+                        print("breaking from posx")
+                        arrayOfButtons.append(someButton)
+                        break
+                    }
+                    guard let width = item["width"] as? String else {
+                        print("breaking from width")
+                        arrayOfButtons.append(someButton)
+                        break
+                    }
+                    guard let height = item["height"] as? String else {
+                        print("breaking from height")
+                        arrayOfButtons.append(someButton)
+                        break
+                    }
+                    guard let posxInt = Int(posx) else {
+                        print("couldn't make posx an int")
+                        break
+                    }
+                    guard let posyInt = Int(posy) else {
+                        print("couldn't make posy an int")
+                        break
+                    }
+                    guard let widthInt = Int(width) else {
+                        print("couldn't make width an int")
+                        break
+                    }
+                    guard let heightInt = Int(height) else {
+                        print("couldn't make height an int")
+                        break
+                    }
+                    someButton.frame = CGRect(x: posxInt, y: posyInt, width: widthInt, height: heightInt)
                     arrayOfButtons.append(someButton)
                 }
             }
@@ -149,6 +227,43 @@ class TemplateFieldLayout {
                 if item["field_type"] as? String == "text" {
                     let someField = UITextField()
                     someField.text = item["field_name"] as? String
+                    guard let posy = item["posy"] as? String else {
+                        print("breaking from posy")
+                        arrayOfTextFields.append(someField)
+                        break
+                    }
+                    guard let posx = item["posx"] as? String else {
+                        print("breaking from posx")
+                        arrayOfTextFields.append(someField)
+                        break
+                    }
+                    guard let width = item["width"] as? String else {
+                        print("breaking from width")
+                        arrayOfTextFields.append(someField)
+                        break
+                    }
+                    guard let height = item["height"] as? String else {
+                        print("breaking from height")
+                        arrayOfTextFields.append(someField)
+                        break
+                    }
+                    guard let posxInt = Int(posx) else {
+                        print("couldn't make posx an int")
+                        break
+                    }
+                    guard let posyInt = Int(posy) else {
+                        print("couldn't make posy an int")
+                        break
+                    }
+                    guard let widthInt = Int(width) else {
+                        print("couldn't make width an int")
+                        break
+                    }
+                    guard let heightInt = Int(height) else {
+                        print("couldn't make height an int")
+                        break
+                    }
+                    someField.frame = CGRect(x: posxInt, y: posyInt, width: widthInt, height: heightInt)
                     arrayOfTextFields.append(someField)
                 }
             }

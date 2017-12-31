@@ -29,12 +29,16 @@ class ViewController: UIViewController {
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        do {
-            try self.template?.createLayout(viewToLayout: self.view, jsonMessage: nil)
-            dump(self.view.subviews)
-        } catch {
-            print(error)
-        }
+       
+            do {
+                try self.template?.createLayout(viewToLayout: self.view, jsonMessage: nil) { [unowned self] (caputredView) in
+                    self.view = caputredView
+                    self.view.layoutSubviews()
+                    dump(self.view.subviews)
+                }
+            } catch {
+                print("create layout \(error)")
+            }
         
     }
 
