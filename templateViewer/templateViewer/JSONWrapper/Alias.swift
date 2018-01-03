@@ -8,6 +8,6 @@
 
 import Foundation
 
-typealias parsableJSON = [String: Any]
+typealias parsableJSON = [[String: Any]]
 
 typealias json = [String: [Any]]

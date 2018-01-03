@@ -33,11 +33,7 @@ JSON wrapper object used to pull json files from either the local device or from
  
 */
 class JSONWrapper {
-    /**
-     sioemtopai
- 
- 
- */
+    
     let url: URL
     let source: FileSource
     let data: Data?
@@ -49,7 +45,7 @@ class JSONWrapper {
         self.data = nil
     }
     
-    convenience init?(urlPath: String, source: FileSource) {
+    convenience init?(urlPath: String, source: FileSource) throws {
         var uri: URL?
         if source == .external {
             uri = URL(string: urlPath)
@@ -57,20 +53,42 @@ class JSONWrapper {
             uri = Bundle.main.url(forResource: urlPath, withExtension: "json")
         }
         guard let url = uri else {
-            return nil
+            throw JSONWrapperError.badURL
         }
         self.init(url: url, source: source)
     }
     
-    func getJsonDataLocal(url: URL) -> json? {
+    func getJsonDataLocal(url: URL) throws -> (json?) {
         do {
-            let data = try Data(contentsOf: url, options: .mappedIfSafe)
-            let json = try JSONSerialization.jsonObject(with: data, options: []) as? json
+            let someData = try Data(contentsOf: url, options: .mappedIfSafe)
+            let json = try JSONSerialization.jsonObject(with: someData, options: []) as? json
+            if json == nil {
+                let jsonV2 = try JSONSerialization.jsonObject(with: someData, options: .allowFragments) as? [String: Any]
+                //print(jsonV2?["fields"] as? [[String: Any]])
+                guard let header = jsonV2?["fields"] as? [[String: Any]] else {
+                    throw JSONWrapperError.dataCorrupted
+                }
+                //print("printing header: \(header)")
+                var dict = [String: [Any]]()
+                for item in header {
+                    if dict["fields"] == nil {
+                        dict.updateValue([item], forKey: "fields")
+                    } else {
+                        dict["fields"]?.append(item as Any)
+                    }
+                }
+                return dict
+                
+                
+            }
             return json
+        } catch JSONWrapperError.dataCorrupted {
+            print("data corrupted")
         } catch {
             print(error)
-            return nil
+            return (nil)
         }
+        return (nil)
     }
     
     func getJsonDataExternal(url: URL) -> json? {
@@ -83,7 +101,12 @@ class JSONWrapper {
     
     func getJSON(url: URL) -> json? {
         if self.source == .local {
-           return getJsonDataLocal(url: url)
+            do {
+                return try getJsonDataLocal(url: url)
+            } catch {
+                print(error)
+                return nil
+            }
         } else {
            return getJsonDataExternal(url: url)
         }

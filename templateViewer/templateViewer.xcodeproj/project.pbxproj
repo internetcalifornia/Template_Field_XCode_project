@@ -16,6 +16,8 @@
 		DCEF346E1FFC54D500ABA631 /* JSONWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEF346D1FFC54D500ABA631 /* JSONWrapper.swift */; };
 		DCEF34701FFC5A4300ABA631 /* JSONMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEF346F1FFC5A4300ABA631 /* JSONMessage.swift */; };
 		DCEF34721FFC6B4900ABA631 /* Alias.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEF34711FFC6B4900ABA631 /* Alias.swift */; };
+		DCEF34751FFC824800ABA631 /* Field.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEF34741FFC824800ABA631 /* Field.swift */; };
+		DCEF347A1FFC8E4B00ABA631 /* dv.json in Resources */ = {isa = PBXBuildFile; fileRef = DCEF34791FFC8C6D00ABA631 /* dv.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +32,8 @@
 		DCEF346D1FFC54D500ABA631 /* JSONWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONWrapper.swift; sourceTree = "<group>"; };
 		DCEF346F1FFC5A4300ABA631 /* JSONMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONMessage.swift; sourceTree = "<group>"; };
 		DCEF34711FFC6B4900ABA631 /* Alias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alias.swift; sourceTree = "<group>"; };
+		DCEF34741FFC824800ABA631 /* Field.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Field.swift; sourceTree = "<group>"; };
+		DCEF34791FFC8C6D00ABA631 /* dv.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = dv.json; path = "/Users/scotteremia-roden/Documents/Template_Field_XCode_project/templateViewer/templateViewer/dv.json"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +66,7 @@
 		2D871A6D1FF80D2300418800 /* templateViewer */ = {
 			isa = PBXGroup;
 			children = (
+				DCEF34731FFC822D00ABA631 /* Fields */,
 				DCEF346C1FFC54C400ABA631 /* JSONWrapper */,
 				2D871A6E1FF80D2300418800 /* AppDelegate.swift */,
 				2D871A701FF80D2300418800 /* ViewController.swift */,
@@ -70,6 +75,7 @@
 				2D871A771FF80D2300418800 /* LaunchScreen.storyboard */,
 				2D871A7A1FF80D2300418800 /* Info.plist */,
 				2D871A821FF81B9000418800 /* templateFields.json */,
+				DCEF34791FFC8C6D00ABA631 /* dv.json */,
 			);
 			path = templateViewer;
 			sourceTree = "<group>";
@@ -82,6 +88,14 @@
 				DCEF34711FFC6B4900ABA631 /* Alias.swift */,
 			);
 			path = JSONWrapper;
+			sourceTree = "<group>";
+		};
+		DCEF34731FFC822D00ABA631 /* Fields */ = {
+			isa = PBXGroup;
+			children = (
+				DCEF34741FFC824800ABA631 /* Field.swift */,
+			);
+			path = Fields;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -146,6 +160,7 @@
 				2D871A791FF80D2300418800 /* LaunchScreen.storyboard in Resources */,
 				2D871A761FF80D2300418800 /* Assets.xcassets in Resources */,
 				2D871A831FF81B9000418800 /* templateFields.json in Resources */,
+				DCEF347A1FFC8E4B00ABA631 /* dv.json in Resources */,
 				2D871A741FF80D2300418800 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -159,6 +174,7 @@
 			files = (
 				DCEF34701FFC5A4300ABA631 /* JSONMessage.swift in Sources */,
 				2D871A711FF80D2300418800 /* ViewController.swift in Sources */,
+				DCEF34751FFC824800ABA631 /* Field.swift in Sources */,
 				DCEF346E1FFC54D500ABA631 /* JSONWrapper.swift in Sources */,
 				DCEF34721FFC6B4900ABA631 /* Alias.swift in Sources */,
 				2D871A6F1FF80D2300418800 /* AppDelegate.swift in Sources */,

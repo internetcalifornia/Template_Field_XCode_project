@@ -28,13 +28,18 @@ class ViewController: UIViewController {
     }
 
     override func viewDidAppear(_ animated: Bool) {
-            let jsonMessage = JSONWrapper(urlPath: "templateFields", source: .local)
+        do {
+            let jsonMessage = try JSONWrapper(urlPath: "dv", source: .local)
+            
             guard let jMessage = jsonMessage, let url = jsonMessage?.url else {
                 print("no jsonwrapper")
                 return
             }
             let data = jMessage.getJSON(url: url)
-            dump(data)
+            let fieldMstr = FieldMstr(json: data)
+        } catch {
+            print(error)
+        }
         
     }
 
