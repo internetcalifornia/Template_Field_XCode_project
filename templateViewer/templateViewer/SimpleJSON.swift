@@ -8,10 +8,7 @@
 
 import Foundation
 
-enum FileSource {
-    case `internal`
-    case `external`
-}
+
 
 
 enum SimpleJSONerror: Error {
@@ -43,14 +40,22 @@ class SimpleJSON {
         if (dataFromExternalPath) {
             source = .external
         } else {
-            source = .internal
+            source = .local
         }
         do {
             let result = try SimpleJSON.retriveURL(path: path, fileExtension: fileExtension, dataFromExternalPath: dataFromExternalPath)
             self.init(path: result.url)
-            self.getJSONData(source: source) { [unowned self] (json, error) in
-                self.json = json
+            let jsondata = self.getJSONData(source: source) { (json, error) in
+                if json != nil {
+                    print("got the json")
+                } else {
+                    print(error)
+                }
             }
+            guard let jsondatau = jsondata else {
+                return
+            }
+            self.json = jsondatau
         } catch {
             print("catching this \(error)")
             return nil
@@ -63,17 +68,18 @@ class SimpleJSON {
                 print("error")
                 throw SimpleJSONerror.couldNotGetLocalPath
             }
+            print(url)
             return (url, .external)
         } else {
             guard let localPath = Bundle.main.path(forResource: path, ofType: fileExtension) else {
                 throw SimpleJSONerror.couldNotGetLocalPath
             }
             let url = URL(fileURLWithPath: localPath)
-            return (url, .internal)
+            return (url, .local)
         }
     }
     
-    private func getJSONData(source: FileSource, completionHandler completion: @escaping (JSON?, SimpleJSONerror?) -> () ) {
+    private func getJSONData(source: FileSource, completionHandler completion: @escaping (JSON?, SimpleJSONerror?) -> () ) -> JSON? {
         do {
             if source == .external {
                 
@@ -108,7 +114,7 @@ class SimpleJSON {
             } else {
                 self.jsonData = try Data(contentsOf: self.path, options: .mappedIfSafe)
                 guard let data = jsonData else {
-                    return print("no data")
+                    return nil
                 }
                 let tempJSON = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? JSON
                 completion(tempJSON, nil)
@@ -117,6 +123,8 @@ class SimpleJSON {
         } catch {
             print("catching \(error)")
         }
+        
+        return self.json
     }
     
     public func parseThroughJSON(json: JSON, parseKey key: String) throws -> parsableJSON {

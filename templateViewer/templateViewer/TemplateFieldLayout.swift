@@ -1,4 +1,4 @@
-//
+/*
 //  TemplateFieldLayout.swift
 //  templateViewer
 //
@@ -19,13 +19,12 @@ enum TemplateLayoutError: Error {
 
 class TemplateFieldLayout {
     
-    var jsonObjectManager: SimpleJSON?
+    var jsonObjectManager: JSONWrapper?
     var jsonDictionary: parsableJSON?
     
     
     init(path: String, fileExtension: String, dataFromExternalPath: Bool) {
-        self.jsonObjectManager = SimpleJSON(path: path, fileExtension: fileExtension, dataFromExternalPath: dataFromExternalPath)
-        
+  
     }
     
     
@@ -40,8 +39,10 @@ class TemplateFieldLayout {
      
      */
     func createLayout(viewToLayout view: UIView, jsonMessage json: JSON?, completionHandler completion: @escaping (UIView) -> Void ) throws -> UIView? {
+        print(json)
         
-        guard let json = json ?? jsonObjectManager?.json else {
+        guard let json = self.jsonObjectManager?.json ?? json else {
+            
             throw SimpleJSONerror.noJSON
         }
         
@@ -275,3 +276,4 @@ class TemplateFieldLayout {
     }
     
 }
+ */
