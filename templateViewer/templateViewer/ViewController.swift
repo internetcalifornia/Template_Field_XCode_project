@@ -12,8 +12,9 @@ class ViewController: UIViewController {
     
     //var template: TemplateFieldLayout?
     var templateName: String?
-
+    var fieldMstr: FieldMstr?
     
+    @IBOutlet weak var scrollView: UIScrollView!
     
 
     override func viewDidLoad() {
@@ -28,6 +29,7 @@ class ViewController: UIViewController {
     }
 
     override func viewDidAppear(_ animated: Bool) {
+        
         do {
             let jsonMessage = try JSONWrapper(urlPath: "dv", source: .local)
             
@@ -36,10 +38,32 @@ class ViewController: UIViewController {
                 return
             }
             let data = jMessage.getJSON(url: url)
-            let fieldMstr = FieldMstr(json: data)
+            fieldMstr = try FieldMstr(json: data)
+            scrollView.frame = UIScreen.main.bounds
+            fieldMstr?.addToView(view: scrollView)
+            var maxY: CGFloat = 0
+            var maxX: CGFloat = 0
+            for view in scrollView.subviews {
+                if maxY <= view.frame.maxY {
+                    maxY = view.frame.maxY
+                }
+                if maxX <= view.frame.maxX {
+                    maxX = view.frame.maxX
+                }
+            }
+            if maxY > scrollView.frame.maxY {
+                scrollView.contentSize.height = maxY
+            }
+            if maxX > scrollView.frame.maxX {
+                scrollView.contentSize.width = maxX
+            }
+            print(scrollView.frame.maxY)
+            
         } catch {
             print(error)
         }
+        
+        
         
     }
 
