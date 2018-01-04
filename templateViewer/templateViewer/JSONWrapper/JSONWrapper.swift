@@ -91,24 +91,34 @@ class JSONWrapper {
         return (nil)
     }
     
-    func getJsonDataExternal(url: URL) -> json? {
+    func getJsonDataExternal(url: URL, completionHandler completion: @escaping (json?, JSONWrapperError?) -> Void ) -> json? {
         let jsonMessage = JSONMessage(configuration: .default)
-        return jsonMessage.download(url: url) { data, error in
-                print("data: \(data)")
-                print("Error: \(error)")
+        let json = jsonMessage.download(url: url) { data, error in
+                completion(data, error)
+            
         }
+        
+        return json
+        
     }
     
-    func getJSON(url: URL) -> json? {
+    func getJSON(url: URL, completionHandler completion: @escaping (json?) -> Void) -> json? {
         if self.source == .local {
             do {
-                return try getJsonDataLocal(url: url)
+                let json = try getJsonDataLocal(url: url)
+                completion(json)
+                return json
             } catch {
                 print(error)
                 return nil
             }
         } else {
-           return getJsonDataExternal(url: url)
+            let message = getJsonDataExternal(url: url) { (json, error) in
+                completion(json)
+                
+                return
+            }
+            return message
         }
     }
 }

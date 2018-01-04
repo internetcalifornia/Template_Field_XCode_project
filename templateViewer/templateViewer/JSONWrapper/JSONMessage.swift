@@ -10,6 +10,8 @@ import Foundation
 
 final class JSONMessage {
     
+    var jsonData: json?
+    
     let session: URLSession
     init(configuration: URLSessionConfiguration) {
         self.session = URLSession(configuration: .default)
@@ -43,7 +45,28 @@ final class JSONMessage {
                 if let data = data {
                     do {
                         let json = try JSONSerialization.jsonObject(with: data, options: []) as? json
+                        self.jsonData = json
                         completion(json, nil)
+                        if json == nil {
+                            let jsonV2 = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any]
+                            //print(jsonV2?["fields"] as? [[String: Any]])
+                            guard let header = jsonV2?["fields"] as? [[String: Any]] else {
+                                throw JSONWrapperError.dataCorrupted
+                            }
+                            //print("printing header: \(header)")
+                            var dict = [String: [Any]]()
+                            for item in header {
+                                if dict["fields"] == nil {
+                                    dict.updateValue([item], forKey: "fields")
+                                } else {
+                                    dict["fields"]?.append(item as Any)
+                                }
+                            }
+                            self.jsonData = dict
+                            completion(dict, nil)
+                            
+                            
+                        }
                     } catch {
                         print(JSONWrapperError.noData)
                         completion(nil, .noData)
